@@ -1,0 +1,3 @@
+
+rootProject.name = 'multi-project-api'
+include('arj-client', 'arj-library')

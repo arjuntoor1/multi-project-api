@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.netflix.nebula:gradle-ospackage-plugin:8.4.1'
+    }
+}
+
+ospackage {
+    packageName "arjun-app"
+    version = "1"
+    release = "1"
+    os = LINUX
+    arch = NOARCH
+    summary "Arjun App"
+    description "Arjun App"
+    vendor "Arjun Toor"
+    packager "Arjun Toor"
+    license "Free"
+}
+
+buildRpm {
+    user 'root'
+    permissionGroup 'root'
+
+    addParentDirs = false
+    directory("/opt/arjun-app", 0755, "root", "root")
+    directory("/opt/arjun-app/lib", 0755, "root", "root")
+
+    preInstall file("src/main/resources/rpm/pre-install.sh")
+    postInstall file("src/main/resources/rpm/post-install.sh")
+
+    into("/opt/arjun-app/lib") {
+        from(bootJar.outputs.files)
+        rename { String fileName -> "arjun-app.jar" }
+        fileMode 0775
+    }
+}
+
+assemble.dependsOn(buildRpm)

@@ -1,0 +1,18 @@
+group "com.toor"
+
+allprojects {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    apply plugin: "idea"
+}
+
+def javaProjects = subprojects.findAll {
+    it.name != "Some non-java project we might add later"
+}
+
+configure(javaProjects) {
+    apply plugin: "java"
+    sourceCompatibility = JavaVersion.VERSION_11
+}
